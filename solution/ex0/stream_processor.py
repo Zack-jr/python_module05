@@ -4,25 +4,29 @@ from abc import ABC, abstractmethod
 
 class DataProcessor(ABC):
 
+    """base class for data processors"""
     def __init__(self):
         self.data = None
 
     @abstractmethod
     def process(self, data: Any) -> str:
+        """abstract method for processing"""
         pass
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
+        """abstract method for validation"""
         pass
 
     def format_output(self, result: str) -> str:
         """has a default behavior, needs to be overridden"""
-        return f"Processed: {result}"
+        return f"Output: {result}"
 
 
 class NumericProcessor(DataProcessor):
 
     def process(self, data: Any) -> str:
+        """process numbers"""
         count = len(data)
         numbers = (float(n) for n in data)
         total_sum = sum(numbers)
@@ -30,6 +34,7 @@ class NumericProcessor(DataProcessor):
         return f"Processed {count} numeric values, sum={total_sum}, avg={avg}"
 
     def validate(self, data: Any) -> bool:
+        """checks if the list of number is actually one"""
         if isinstance(data, List):
             for n in data:
                 if isinstance(n, (float, int)) is False:
@@ -40,12 +45,15 @@ class NumericProcessor(DataProcessor):
             return False
 
     def format_output(self, result: str) -> str:
+        """formats the output and return the result"""
         return f"Output: {result}"
 
 
 class TextProcessor(DataProcessor):
+    """processor class for text data"""
 
     def process(self, data: str) -> str:
+        """processes a string"""
         try:
             length = len(data)
             word_count = len(data.split(" "))
@@ -54,6 +62,7 @@ class TextProcessor(DataProcessor):
             return "An error has been found."
 
     def validate(self, data: str) -> bool:
+        """checks if the data is a string"""
         if isinstance(data, str):
             print("Validation: Text data verified")
             return True
@@ -61,11 +70,12 @@ class TextProcessor(DataProcessor):
             return False
 
     def format_output(self, result: str) -> str:
+        """formats the output"""
         return f"Output: {result}"
 
 
 class LogProcessor(DataProcessor):
-
+    """processor class for logs"""
     def process(self, data: str) -> str:
         prefix_suffix = []
         prefix_suffix = data.split(":", 1)
